@@ -3,28 +3,31 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Buat token CSRF dan simpan di Cookie peramban
+// 1. BUAT COOKIE SEGERA SAAT FILE DIMUAT
+// Karena file ini di-include di baris atas header.php, setcookie akan aman
+// dari error "headers already sent" karena HTML belum dicetak.
+if (empty($_COOKIE['csrf_token'])) {
+    $token = bin2hex(random_bytes(32));
+    setcookie('csrf_token', $token, [
+        'expires' => time() + 3600,
+        'path' => '/',
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    $_COOKIE['csrf_token'] = $token;
+}
+
+// 2. Fungsi untuk mengambil token yang sudah ada
 function csrf_token() {
-    if (empty($_COOKIE['csrf_token'])) {
-        $token = bin2hex(random_bytes(32));
-        setcookie('csrf_token', $token, [
-            'expires' => time() + 3600,
-            'path' => '/',
-            'httponly' => true,
-            'samesite' => 'Lax'
-        ]);
-        $_COOKIE['csrf_token'] = $token;
-    }
-    return $_COOKIE['csrf_token'];
+    return $_COOKIE['csrf_token'] ?? '';
 }
 
-// Output field input tersembunyi untuk form
+// 3. Output field input tersembunyi untuk form
 function csrf_field() {
-    $token = csrf_token();
-    return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token) . '">';
+    return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(csrf_token()) . '">';
 }
 
-// Verifikasi token dari POST dengan Cookie
+// 4. Verifikasi token dari POST dengan Cookie
 function csrf_verify() {
     $postToken = $_POST['csrf_token'] ?? '';
     $cookieToken = $_COOKIE['csrf_token'] ?? '';
