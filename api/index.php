@@ -1,4 +1,35 @@
 <?php
+// ==========================================
+// 1. LOGIKA ROUTER VERCEL (Jangan Dihapus)
+// ==========================================
+$request_uri = $_SERVER['REQUEST_URI'];
+$path = parse_url($request_uri, PHP_URL_PATH);
+$path = preg_replace('/^\/api/', '', $path); // Hapus awalan /api dari Vercel
+
+// Jika URL yang diakses BUKAN halaman utama (misal: /buku/list.php)
+// Maka arahkan (include) ke file yang sesuai dan hentikan eksekusi kode di bawahnya
+if ($path !== '' && $path !== '/') {
+    $file_path = __DIR__ . $path;
+    
+    if (file_exists($file_path) && pathinfo($file_path, PATHINFO_EXTENSION) === 'php') {
+        require $file_path;
+        exit;
+    } elseif (is_dir($file_path) && file_exists($file_path . '/index.php')) {
+        require $file_path . '/index.php';
+        exit;
+    } elseif (file_exists($file_path) && is_file($file_path)) {
+        return false; // Biarkan file statis (CSS/JS) ditangani otomatis
+    } else {
+        http_response_code(404);
+        echo "<h1>404 Halaman Tidak Ditemukan</h1>";
+        exit;
+    }
+}
+
+
+// ==========================================
+// 2. KODE BERANDA ASLI ANDA (Untuk URL '/')
+// ==========================================
 require __DIR__ . '/includes/auth.php';
 $page_title = "Beranda";
 include __DIR__ . '/includes/header.php';
@@ -13,11 +44,11 @@ $totalDipinjam = $pdo->query("SELECT COUNT(*) FROM peminjaman WHERE status = 'di
             <h2>Selamat Datang di Sistem Perpustakaan Mini</h2>
             <p>Aplikasi sederhana untuk mengelola data buku dan anggota perpustakaan.</p>
             <div class="hero-actions">
-                <a class="btn btn-primary" href="buku/list.php">Lihat Koleksi Buku</a>
-                <?php if ($sudahLogin): ?>
-                <a class="btn btn-outline" href="peminjaman/tambah.php">Peminjaman Baru</a>
+                <a class="btn btn-primary" href="/buku/list.php">Lihat Koleksi Buku</a>
+                <?php if (isset($sudahLogin) && $sudahLogin): ?>
+                <a class="btn btn-outline" href="/peminjaman/tambah.php">Peminjaman Baru</a>
                 <?php else: ?>
-                <a class="btn btn-outline" href="auth/login.php">Login Petugas</a>
+                <a class="btn btn-outline" href="/auth/login.php">Login Petugas</a>
                 <?php endif; ?>
             </div>
         </section>

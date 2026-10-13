@@ -21,10 +21,10 @@ if ($user && password_verify($password, $user['password'])) {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['nama'] = $user['nama'];
     $_SESSION['role'] = $user['role'];
-    header('Location: ../index.php');
+    header('Location: /');
     exit;
 }
 
 $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Username atau password salah.'];
-header('Location: login.php');
+header('Location: /auth/login.php');
 exit;

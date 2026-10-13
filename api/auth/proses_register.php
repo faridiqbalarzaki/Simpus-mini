@@ -24,7 +24,7 @@ if (strlen($password) < 6) {
 
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
-    header('Location: register.php');
+    header('Location: /auth/register.php');
     exit;
 }
 
@@ -32,7 +32,7 @@ $cek = $pdo->prepare("SELECT id FROM users WHERE username = :username");
 $cek->execute(['username' => $username]);
 if ($cek->fetch()) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Username sudah digunakan.'];
-    header('Location: register.php');
+    header('Location: /auth/register.php');
     exit;
 }
 
@@ -46,5 +46,5 @@ $stmt->execute([
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Registrasi berhasil, silakan login.'];
-header('Location: login.php');
+header('Location: /auth/login.php');
 exit;

@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 if (isset($_SESSION['user_id'])) {
-    header('Location: ../index.php');
+    header('Location: /');
     exit;
 }
 
@@ -20,7 +20,7 @@ unset($_SESSION['flash']);
                 <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
             <?php endif; ?>
 
-            <form method="post" action="proses_login.php">
+            <form method="post" action="/auth/proses_login.php">
                 <?php echo csrf_field(); ?>
                 <p>
                     <label for="username">Username</label><br>
@@ -34,6 +34,6 @@ unset($_SESSION['flash']);
                     <button type="submit">Masuk</button>
                 </p>
             </form>
-            <p>Belum punya akun? <a href="register.php">Daftar di sini</a></p>
+            <p>Belum punya akun? <a href="/auth/register.php">Daftar di sini</a></p>
         </section>
 <?php include __DIR__ . '/../includes/footer.php'; ?>
