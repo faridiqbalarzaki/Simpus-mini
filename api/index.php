@@ -10,7 +10,7 @@ $path = preg_replace('/^\/api/', '', $path); // Hapus awalan /api dari Vercel
 // Maka arahkan (include) ke file yang sesuai dan hentikan eksekusi kode di bawahnya
 if ($path !== '' && $path !== '/') {
     $file_path = __DIR__ . $path;
-    
+
     if (file_exists($file_path) && pathinfo($file_path, PATHINFO_EXTENSION) === 'php') {
         require $file_path;
         exit;
@@ -18,7 +18,25 @@ if ($path !== '' && $path !== '/') {
         require $file_path . '/index.php';
         exit;
     } elseif (file_exists($file_path) && is_file($file_path)) {
-        return false; // Biarkan file statis (CSS/JS) ditangani otomatis
+        $ext = strtolower(pathinfo($file_path, PATHINFO_EXTENSION));
+        $types = [
+            'css'   => 'text/css; charset=utf-8',
+            'js'    => 'application/javascript; charset=utf-8',
+            'svg'   => 'image/svg+xml',
+            'png'   => 'image/png',
+            'jpg'   => 'image/jpeg',
+            'jpeg'  => 'image/jpeg',
+            'gif'   => 'image/gif',
+            'ico'   => 'image/x-icon',
+            'woff2' => 'font/woff2',
+        ];
+        if (isset($types[$ext])) {
+            header('Content-Type: ' . $types[$ext]);
+            readfile($file_path);
+            exit;
+        }
+        http_response_code(403);
+        exit;
     } else {
         http_response_code(404);
         echo "<h1>404 Halaman Tidak Ditemukan</h1>";
