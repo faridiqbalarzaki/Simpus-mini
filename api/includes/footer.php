@@ -7,8 +7,7 @@
         </footer>
     </div> <!-- end app-layout -->
 
-    <!-- JS Utama (Menggunakan Path Absolut) -->
-    <script src="/assets/js/app.js"></script>
+    <script src="<?php echo $base; ?>assets/js/app.js"></script>
     <script>
     // Penanganan toggle sidebar untuk tampilan mobile
     document.addEventListener("DOMContentLoaded", function () {
