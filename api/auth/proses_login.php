@@ -13,6 +13,14 @@ $stmt->execute(['username' => $username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user['password'])) {
+    // Akun diblokir petugas -> tolak login (dicek setelah password benar
+    // agar tidak membocorkan status akun ke orang yang tidak punya password)
+    if (!in_array($user['aktif'], [true, 't', 'true', '1', 1], true)) {
+        $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Akun Anda diblokir. Silakan hubungi petugas perpustakaan.'];
+        header('Location: /auth/login');
+        exit;
+    }
+
     // Session = cookie bertanda tangan (stateless): tidak ada session ID
     // yang bisa di-fixation, jadi session_regenerate_id() tidak diperlukan.
     $_SESSION['user_id'] = $user['id'];

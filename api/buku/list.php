@@ -35,7 +35,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                     <h2>Daftar Buku</h2>
                     <p class="lead">Seluruh koleksi buku yang tersedia.</p>
                 </div>
-                <?php if ($sudahLogin): ?>
+                <?php if ($isPetugas): ?>
                 <a class="btn btn-primary" href="/buku/tambah">+ Tambah Buku</a>
                 <?php endif; ?>
             </div>
@@ -62,7 +62,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                         <th>Pengarang</th>
                         <th>Tahun</th>
                         <th>Stok</th>
-                        <?php if ($sudahLogin): ?>
+                        <?php if ($isPetugas): ?>
                         <th>Aksi</th>
                         <?php endif; ?>
                     </tr>
@@ -70,16 +70,16 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                 <tbody>
                     <?php if (empty($daftarBuku)): ?>
                     <tr>
-                        <td colspan="<?php echo $sudahLogin ? '5' : '4'; ?>">Tidak ada data buku yang cocok.</td>
+                        <td colspan="<?php echo $isPetugas ? '5' : '4'; ?>">Tidak ada data buku yang cocok.</td>
                     </tr>
                     <?php else: ?>
                         <?php foreach ($daftarBuku as $buku): ?>
                         <tr>
-                            <td class="judul"><?php echo e($buku['judul']); ?></td>
+                            <td class="judul"><a href="/buku/detail?id=<?php echo (int) $buku['id']; ?>"><?php echo e($buku['judul']); ?></a></td>
                             <td><?php echo e($buku['pengarang']); ?></td>
                             <td><?php echo $buku['tahun']; ?></td>
                             <td><span class="badge <?php echo $buku['stok'] <= 0 ? 'badge-out' : ($buku['stok'] <= 2 ? 'badge-low' : 'badge-ok'); ?>"><?php echo $buku['stok']; ?></span></td>
-                            <?php if ($sudahLogin): ?>
+                            <?php if ($isPetugas): ?>
                             <td class="aksi">
                                 <a href="/buku/edit?id=<?php echo $buku['id']; ?>" class="btn-edit">Edit</a>
                                 <form class="form-hapus" method="post" action="/buku/hapus">

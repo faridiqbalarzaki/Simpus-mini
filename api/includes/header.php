@@ -2,7 +2,13 @@
 require_once __DIR__ . '/session.php';
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/csrf.php';
-$sudahLogin = isset($_SESSION['user_id']);
+require_once __DIR__ . '/rbac.php';
+
+// Role diverifikasi ke database (bukan sekadar percaya isi cookie)
+$user = auth_user();
+$sudahLogin = $user !== null;
+$isPetugas = $sudahLogin && $user['role'] === 'petugas';
+$isAnggota = $sudahLogin && $user['role'] === 'anggota';
 
 // Halaman aktif diambil dari router (SCRIPT_FILENAME selalu index.php di Vercel)
 $__halaman = ltrim($GLOBALS['ROUTE_PATH'] ?? '/', '/');
@@ -59,11 +65,11 @@ $aktif = function (array $daftar) use ($__halaman) {
 
                 <li class="nav-category">Koleksi Buku</li>
                 <li>
-                    <a href="/buku/list"<?php echo $aktif(['buku/list', 'buku/edit']); ?>>
+                    <a href="/buku/list"<?php echo $aktif(['buku/list', 'buku/detail', 'buku/edit']); ?>>
                         <i class="ph ph-books menu-icon"></i> Daftar Buku
                     </a>
                 </li>
-                <?php if ($sudahLogin): ?>
+                <?php if ($isPetugas): ?>
                 <li>
                     <a href="/buku/tambah"<?php echo $aktif(['buku/tambah']); ?>>
                         <i class="ph ph-plus-circle menu-icon"></i> Tambah Buku
@@ -81,6 +87,11 @@ $aktif = function (array $daftar) use ($__halaman) {
                         <i class="ph ph-user-plus menu-icon"></i> Tambah Anggota
                     </a>
                 </li>
+                <li>
+                    <a href="/users/list"<?php echo $aktif(['users/list', 'users/tambah']); ?>>
+                        <i class="ph ph-identification-card menu-icon"></i> Akun Anggota
+                    </a>
+                </li>
 
                 <li class="nav-category">Sirkulasi</li>
                 <li>
@@ -95,7 +106,23 @@ $aktif = function (array $daftar) use ($__halaman) {
                 </li>
                 <li>
                     <a href="/peminjaman/riwayat"<?php echo $aktif(['peminjaman/riwayat']); ?>>
-                        <i class="ph ph-clock-counter-clockwise menu-icon"></i> Riwayat
+                        <i class="ph ph-clock-counter-clockwise menu-icon"></i> Semua Transaksi
+                    </a>
+                </li>
+                <?php elseif ($isAnggota): ?>
+                <li class="nav-category">Peminjaman</li>
+                <li>
+                    <a href="/peminjaman/riwayat"<?php echo $aktif(['peminjaman/riwayat']); ?>>
+                        <i class="ph ph-clock-counter-clockwise menu-icon"></i> Riwayat Saya
+                    </a>
+                </li>
+                <?php endif; ?>
+
+                <?php if ($sudahLogin): ?>
+                <li class="nav-category">Akun</li>
+                <li>
+                    <a href="/profil/index"<?php echo $aktif(['profil/index']); ?>>
+                        <i class="ph ph-user-gear menu-icon"></i> Profil Saya
                     </a>
                 </li>
                 <?php endif; ?>
@@ -107,7 +134,7 @@ $aktif = function (array $daftar) use ($__halaman) {
                 <?php if ($sudahLogin): ?>
                     <div class="user-info">
                         <i class="ph-fill ph-user-circle" style="font-size: 1.5rem; color: #ffffff;"></i>
-                        <span class="user-name" title="<?php echo e($_SESSION['nama']); ?>"><?php echo e($_SESSION['nama']); ?></span>
+                        <span class="user-name" title="<?php echo e($user['nama']); ?>"><?php echo e($user['nama']); ?> <small style="opacity:.7">(<?php echo e($user['role']); ?>)</small></span>
                     </div>
                     <a href="/auth/logout" class="btn-logout" title="Logout">
                         <i class="ph ph-sign-out"></i> Logout

@@ -32,6 +32,6 @@ unset($_SESSION['flash']);
                     <button type="submit">Masuk</button>
                 </p>
             </form>
-            <p>Belum punya akun? <a href="/auth/register">Daftar di sini</a></p>
+            <p>Belum punya akun? Hubungi petugas perpustakaan untuk dibuatkan akun.</p>
         </section>
 <?php include __DIR__ . '/../includes/footer.php'; ?>

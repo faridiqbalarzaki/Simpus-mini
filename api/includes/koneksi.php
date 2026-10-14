@@ -1,6 +1,9 @@
 <?php
-// Koneksi lazy + sekali per request (aman di-require berkali-kali).
-if (!isset($pdo)) {
+// Koneksi lazy + sekali per request (aman di-require berkali-kali,
+// termasuk dari dalam fungsi, karena disimpan juga di $GLOBALS['pdo']).
+if (isset($GLOBALS['pdo'])) {
+    $pdo = $GLOBALS['pdo'];
+} else {
     $config = require __DIR__ . '/config.php';
 
     try {
@@ -16,6 +19,7 @@ if (!isset($pdo)) {
             // per query, bukan 2 (prepare + execute).
             PDO::ATTR_EMULATE_PREPARES   => true,
         ]);
+        $GLOBALS['pdo'] = $pdo;
     } catch (PDOException $e) {
         error_log('DB connect failed: ' . $e->getMessage());
         http_response_code(503);

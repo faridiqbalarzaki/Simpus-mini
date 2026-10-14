@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
+require_role('petugas');
 $page_title = "Tambah Buku";
 include __DIR__ . '/../includes/header.php';
 
