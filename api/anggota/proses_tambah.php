@@ -20,7 +20,7 @@ if ($noAnggota === '') {
 
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
-    header('Location: tambah.php');
+    header('Location: /anggota/tambah');
     exit;
 }
 
@@ -37,5 +37,5 @@ $stmt->execute([
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Anggota berhasil ditambahkan.'];
-header('Location: list.php');
+header('Location: /anggota/list');
 exit;

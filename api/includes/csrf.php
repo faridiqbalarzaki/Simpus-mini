@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/session.php';
 
 // 1. BUAT COOKIE SEGERA SAAT FILE DIMUAT
 // Karena file ini di-include di baris atas header.php, setcookie akan aman
@@ -12,6 +10,7 @@ if (empty($_COOKIE['csrf_token'])) {
         'expires' => time() + 3600,
         'path' => '/',
         'httponly' => true,
+        'secure' => (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https'),
         'samesite' => 'Lax'
     ]);
     $_COOKIE['csrf_token'] = $token;
@@ -35,9 +34,8 @@ function csrf_verify() {
     if (empty($postToken) || empty($cookieToken) || !hash_equals($cookieToken, $postToken)) {
         $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Permintaan ditolak: token CSRF tidak valid atau kedaluwarsa.'];
         
-        // Arahkan kembali ke halaman asal (register/login)
-        $referer = $_SERVER['HTTP_REFERER'] ?? '/auth/login.php';
-        header('Location: ' . $referer);
+        // Arahkan ke login (tidak memakai Referer agar bebas open-redirect)
+        header('Location: /auth/login');
         exit;
     }
 }

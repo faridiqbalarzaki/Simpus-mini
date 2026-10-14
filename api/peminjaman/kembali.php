@@ -36,7 +36,7 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
 
             <div class="search-box">
-                <form method="get" action="kembali.php">
+                <form method="get" action="/peminjaman/kembali">
                     <span>
                         <label for="search-input">Cari anggota/buku</label><br>
                         <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>" placeholder="Nama anggota atau judul buku...">
@@ -67,7 +67,7 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?php echo e($trx['judul']); ?></td>
                             <td><?php echo $trx['tanggal_pinjam']; ?></td>
                             <td class="aksi">
-                                <form method="post" action="proses_kembali.php">
+                                <form method="post" action="/peminjaman/proses_kembali">
                                     <?php echo csrf_field(); ?>
                                     <input type="hidden" name="id" value="<?php echo $trx['id']; ?>">
                                     <button type="submit" class="btn-kembali">Kembalikan</button>

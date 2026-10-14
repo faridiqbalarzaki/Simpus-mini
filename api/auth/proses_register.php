@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/../includes/session.php';
 require __DIR__ . '/../includes/csrf.php';
 require __DIR__ . '/../includes/koneksi.php';
 
@@ -24,7 +22,7 @@ if (strlen($password) < 6) {
 
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
-    header('Location: /auth/register.php');
+    header('Location: /auth/register');
     exit;
 }
 
@@ -32,7 +30,7 @@ $cek = $pdo->prepare("SELECT id FROM users WHERE username = :username");
 $cek->execute(['username' => $username]);
 if ($cek->fetch()) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Username sudah digunakan.'];
-    header('Location: /auth/register.php');
+    header('Location: /auth/register');
     exit;
 }
 
@@ -46,5 +44,5 @@ $stmt->execute([
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Registrasi berhasil, silakan login.'];
-header('Location: /auth/login.php');
+header('Location: /auth/login');
 exit;

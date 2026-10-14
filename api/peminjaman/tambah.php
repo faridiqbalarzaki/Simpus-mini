@@ -22,7 +22,7 @@ $daftarBukuTersedia = $pdo->query("SELECT * FROM buku WHERE stok > 0 ORDER BY ju
             <?php elseif (empty($daftarBukuTersedia)): ?>
                 <p class="flash flash-error">Tidak ada buku dengan stok tersedia saat ini.</p>
             <?php else: ?>
-            <form method="post" action="proses_tambah.php">
+            <form method="post" action="/peminjaman/proses_tambah">
                 <?php echo csrf_field(); ?>
                 <p>
                     <label for="anggota_id">Anggota</label><br>

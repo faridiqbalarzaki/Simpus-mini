@@ -12,7 +12,7 @@ $alamat = trim($_POST['alamat'] ?? '');
 $noHp = trim($_POST['no_hp'] ?? '');
 
 if (!$id) {
-    header('Location: list.php');
+    header('Location: /anggota/list');
     exit;
 }
 
@@ -26,7 +26,7 @@ if ($noAnggota === '') {
 
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
-    header('Location: edit.php?id=' . urlencode($id));
+    header('Location: /anggota/edit?id=' . urlencode($id));
     exit;
 }
 
@@ -43,5 +43,5 @@ $stmt->execute([
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Anggota berhasil diperbarui.'];
-header('Location: list.php');
+header('Location: /anggota/list');
 exit;

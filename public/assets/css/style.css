@@ -1,0 +1,1114 @@
+/* =====================================================================
+   SIMPUS-Mini — tampilan bersih: header hijau, kartu putih, ubin biru muda
+   Palet mengikuti tampilan beranda: hijau tua + abu terang + biru keabuan.
+   Mobile-first-friendly, dark mode otomatis (atau lewat tombol tema).
+   ===================================================================== */
+
+/* ===== Token warna & ukuran ===== */
+:root {
+  color-scheme: light;
+
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #1f2937;
+  --ink-2: #374151;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --field: #ffffff;
+  --hover: #f3f6fb;
+
+  --bar: #1e5631; /* hijau header */
+  --on-bar: #ffffff;
+  --heading: #1e5631; /* judul & angka */
+  --link: #1e5631;
+  --primary: #1e5631; /* tombol utama */
+  --primary-hover: #17452a;
+  --on-primary: #ffffff;
+  --primary-soft: #e8f1ea;
+
+  --tile: #eef2fa; /* ubin ringkasan & kepala tabel */
+  --tile-ink: #4b5a78;
+
+  --warn: #b45309;
+  --bad: #b91c1c;
+  --bad-soft: #fdecec;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 2px 8px rgba(16, 24, 40, 0.06);
+  --wrap: 1120px;
+  --font:
+    "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+/* Gelap otomatis mengikuti sistem, kecuali pengguna memilih tema terang */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #14181a;
+    --surface: #1c2226;
+    --ink: #e5e9ec;
+    --ink-2: #c3cbd1;
+    --muted: #98a2ab;
+    --line: #2c353b;
+    --field: #182024;
+    --hover: #232b31;
+    --bar: #17402a;
+    --heading: #8fd4a6;
+    --link: #8fd4a6;
+    --primary: #2f7d4a;
+    --primary-hover: #3a8f58;
+    --primary-soft: rgba(143, 212, 166, 0.14);
+    --tile: #232c35;
+    --tile-ink: #aebbd0;
+    --warn: #f0b562;
+    --bad: #f08a8a;
+    --bad-soft: rgba(240, 138, 138, 0.13);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+}
+/* Gelap pilihan manual (tombol tema) */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #14181a;
+  --surface: #1c2226;
+  --ink: #e5e9ec;
+  --ink-2: #c3cbd1;
+  --muted: #98a2ab;
+  --line: #2c353b;
+  --field: #182024;
+  --hover: #232b31;
+  --bar: #17402a;
+  --heading: #8fd4a6;
+  --link: #8fd4a6;
+  --primary: #2f7d4a;
+  --primary-hover: #3a8f58;
+  --primary-soft: rgba(143, 212, 166, 0.14);
+  --tile: #232c35;
+  --tile-ink: #aebbd0;
+  --warn: #f0b562;
+  --bad: #f08a8a;
+  --bad-soft: rgba(240, 138, 138, 0.13);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== Reset & dasar ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+}
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  font-weight: 700;
+}
+:focus-visible {
+  outline: 3px solid #7cc79a;
+  outline-offset: 2px;
+}
+
+/* ===== Header: dua tingkat di desktop, ringkas di ponsel =====
+   Baris 1: merek (kiri) + tema & akun (kanan)
+   Baris 2: menu navigasi selebar header                              */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.6rem;
+  padding: 0.8rem max(1.25rem, calc((100% - var(--wrap)) / 2)) 0;
+  background: var(--bar);
+  color: var(--on-bar);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+header h1 {
+  margin-right: auto;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  color: var(--on-bar);
+}
+header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Menu: baris sendiri, dipisah garis tipis dari baris merek */
+header nav {
+  order: 3;
+  flex: 0 0 100%;
+  padding: 0.55rem 0 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+header nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem;
+}
+header nav .nav-label {
+  display: none;
+}
+header nav a {
+  display: block;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.92rem;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+header nav a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+header nav a.active {
+  background: #ffffff;
+  color: #1e5631;
+  font-weight: 700;
+}
+
+/* Tombol ganti tema & status login */
+.theme-toggle,
+.auth-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 36px;
+  padding: 0.25rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--on-bar);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.theme-toggle {
+  order: 1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.theme-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+.auth-status {
+  order: 2;
+  gap: 0.7rem;
+}
+.auth-status span {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+.auth-status a {
+  flex: none;
+  padding-left: 0.7rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  color: #cdeed8;
+  font-weight: 600;
+}
+
+/* Tombol hamburger: hanya muncul di layar kecil */
+.nav-toggle-label,
+#nav-toggle-btn {
+  display: none;
+  place-items: center;
+  order: 1;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--on-bar);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.nav-toggle-label:hover,
+#nav-toggle-btn:hover,
+#nav-toggle-btn[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ===== Konten ===== */
+main {
+  flex: 1;
+  width: min(100% - 2.5rem, var(--wrap));
+  margin-inline: auto;
+  padding: 2rem 0 0.5rem;
+}
+section {
+  margin-bottom: 1.5rem;
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+section h2 {
+  font-size: 1.65rem;
+  color: var(--heading);
+}
+section h3 {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.15rem;
+  color: var(--heading);
+}
+section > p,
+.hero p {
+  margin-top: 0.75rem;
+  max-width: 68ch;
+  color: var(--ink-2);
+}
+section > p a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lead {
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Hero */
+.hero .eyebrow {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+/* ===== Tombol ===== */
+.btn,
+form button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 40px;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+.btn-primary,
+form button[type="submit"] {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover,
+form button[type="submit"]:hover {
+  background: var(--primary-hover);
+  color: var(--on-primary);
+  text-decoration: none;
+}
+.btn-outline {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+.btn-outline:hover {
+  background: var(--hover);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ===== Ringkasan (ubin statistik) ===== */
+section.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.5rem 1.5rem;
+  align-items: stretch;
+}
+section.stats > :not(.stat-card) {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.stats-label {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.75rem 1rem;
+  background: var(--tile);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.stat-card h3 {
+  order: 1;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tile-ink);
+}
+.stat-card p {
+  order: 2;
+  margin: 0;
+  max-width: none;
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--heading);
+}
+.stat-icon {
+  display: none;
+}
+
+/* ===== Tabel ===== */
+.table-responsive {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+th,
+td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  vertical-align: middle;
+}
+thead th {
+  background: var(--tile);
+  color: var(--tile-ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+tbody td {
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+}
+tbody tr:hover {
+  background: var(--hover);
+}
+td.judul {
+  font-weight: 600;
+  color: var(--ink);
+}
+td.kode span {
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: var(--primary-soft);
+  color: var(--heading);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+/* Stok: titik penanda + angka */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+.badge-low::before {
+  background: var(--warn);
+}
+.badge-out {
+  color: var(--bad);
+}
+.badge-out::before {
+  background: var(--bad);
+}
+
+/* Tombol aksi di tabel */
+td.aksi {
+  white-space: nowrap;
+}
+td button,
+td a.btn-edit,
+td a.btn-detail,
+td form button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0.25rem 0.8rem;
+  margin: 0 0.2rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+td button:hover,
+td a.btn-edit:hover,
+td a.btn-detail:hover,
+td form button[type="submit"]:hover {
+  background: var(--hover);
+  border-color: var(--muted);
+  color: var(--ink);
+  text-decoration: none;
+}
+td button.btn-edit:hover,
+td a.btn-edit:hover,
+td form button.btn-kembali:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--heading);
+}
+td button.btn-hapus:hover,
+td form button.btn-hapus[type="submit"]:hover {
+  background: var(--bad-soft);
+  border-color: var(--bad);
+  color: var(--bad);
+}
+td form {
+  display: inline-flex;
+  margin: 0;
+  vertical-align: middle;
+}
+td form p {
+  display: none;
+}
+
+/* ===== Form ===== */
+form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+  margin-top: 1.25rem;
+}
+form p {
+  margin: 0;
+}
+form p:last-child {
+  grid-column: 1 / -1;
+  padding-top: 0.25rem;
+}
+form br {
+  display: none;
+}
+form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+form p:has(input[required]) label::after {
+  content: " *";
+  color: var(--bad);
+}
+form input,
+form select,
+form textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--field);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+form input:focus,
+form select:focus,
+form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+form input:user-invalid {
+  border-color: var(--bad);
+}
+.error {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--bad);
+}
+
+/* Pencarian & filter */
+.search-box {
+  margin: 1.25rem 0;
+}
+.search-box form,
+form.filter {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+  margin: 0;
+}
+form.filter {
+  margin-top: 1.25rem;
+}
+form.filter p:last-child {
+  grid-column: auto;
+  padding-top: 0;
+}
+.search-box form span {
+  display: block;
+}
+
+/* Pesan flash */
+.flash {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 0 0 1.25rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.93rem;
+  font-weight: 500;
+}
+.flash::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+}
+.flash-success {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--heading);
+}
+.flash-error {
+  background: var(--bad-soft);
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+/* Paginasi */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+}
+.pagination a {
+  display: grid;
+  place-items: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.pagination a:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.pagination a.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+
+/* Login & registrasi */
+section.auth {
+  max-width: 460px;
+  margin-inline: auto;
+}
+section.auth form {
+  grid-template-columns: 1fr;
+}
+section.auth > p:last-child {
+  margin-top: 1.25rem;
+  font-size: 0.93rem;
+}
+
+/* ===== Footer ===== */
+footer {
+  width: min(100% - 2.5rem, var(--wrap));
+  margin-inline: auto;
+  padding: 1.75rem 0 2rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+footer strong {
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+/* ===== Responsive ===== */
+
+/* Tablet & di bawahnya: baris atas hanya merek + hamburger.
+   Menu, tema, dan akun muncul bersama saat hamburger dibuka. */
+@media (max-width: 960px) {
+  header {
+    padding-bottom: 0.8rem;
+    row-gap: 0;
+  }
+  .nav-toggle-label,
+  #nav-toggle-btn {
+    display: grid;
+  }
+  header nav {
+    display: none;
+    order: 4;
+    margin-top: 0.8rem;
+    padding: 0.6rem 0 0.5rem;
+  }
+  header nav.nav-open {
+    display: block;
+  }
+  header nav ul {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 0.2rem;
+  }
+  header nav a {
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.97rem;
+  }
+
+  /* Tema & akun: tersembunyi sampai menu dibuka, lalu satu baris */
+  .theme-toggle,
+  .auth-status {
+    display: none;
+    margin-top: 0.5rem;
+    padding-top: 0.25rem;
+  }
+  header nav.nav-open ~ .theme-toggle,
+  header nav.nav-open ~ .auth-status {
+    display: inline-flex;
+  }
+  header nav.nav-open ~ .theme-toggle {
+    order: 5;
+  }
+  header nav.nav-open ~ .auth-status {
+    order: 6;
+    margin-left: auto;
+  }
+}
+
+/* Ponsel */
+@media (max-width: 640px) {
+  header h1 {
+    font-size: 1.3rem;
+  }
+  main {
+    width: min(100% - 2rem, var(--wrap));
+    padding-top: 1.25rem;
+  }
+  footer {
+    width: min(100% - 2rem, var(--wrap));
+  }
+  section {
+    padding: 1.25rem;
+    margin-bottom: 1.1rem;
+  }
+  section h2,
+  .stats-label {
+    font-size: 1.4rem;
+  }
+  section.stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .stat-card {
+    padding: 1.25rem 0.5rem;
+  }
+  .stat-card p {
+    font-size: 2rem;
+  }
+  form,
+  .search-box form,
+  form.filter {
+    grid-template-columns: 1fr;
+  }
+  .hero-actions .btn {
+    flex: 1 1 100%;
+  }
+  .section-head .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* =====================================================================
+   TAMPILAN SIDEBAR SAMPING (CLEAN & MODERN)
+   ===================================================================== */
+body.has-sidebar {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+}
+
+.mobile-topbar {
+  display: none;
+}
+
+/* Sidebar Container */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bar);
+  color: var(--on-bar);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.sidebar-brand {
+  padding: 1.5rem 1.4rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sidebar-brand .brand-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.sidebar-brand h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Sidebar Navigasi */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0.85rem;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav .nav-category {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+  padding: 0.9rem 0.75rem 0.35rem;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.sidebar-nav a .menu-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.sidebar-nav a.active {
+  background: #ffffff;
+  color: var(--bar);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.sidebar-nav a.active .menu-icon {
+  opacity: 1;
+}
+
+/* Sidebar Footer & Auth */
+.sidebar-footer {
+  padding: 1rem 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-footer .auth-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.sidebar-footer .user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.sidebar-footer .user-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-footer .btn-logout {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffd8d8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.sidebar-footer .btn-logout:hover {
+  background: rgba(255, 60, 60, 0.3);
+  color: #ffffff;
+}
+
+.sidebar-footer .btn-login {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--bar);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Kontainer Utama Layout */
+.app-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.app-layout main {
+  flex: 1;
+  width: min(100% - 3rem, 1100px);
+  margin-inline: auto;
+  padding: 2.5rem 0 1.5rem;
+}
+
+.app-layout footer {
+  padding: 1.5rem 0;
+  margin-inline: auto;
+  width: min(100% - 3rem, 1100px);
+  color: var(--muted);
+  font-size: 0.88rem;
+  border-top: 1px solid var(--line);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+/* Responsif Mobile & Tablet */
+@media (max-width: 900px) {
+  body.has-sidebar {
+    flex-direction: column;
+  }
+
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background: var(--bar);
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 95;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .mobile-topbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .mobile-topbar #nav-toggle-btn {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 270px;
+    height: 100vh;
+    z-index: 120;
+    transition: left 0.25s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 110;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.25s ease,
+      visibility 0.25s ease;
+  }
+
+  .sidebar-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .app-layout main {
+    width: min(100% - 1.5rem, 100%);
+    padding: 1.5rem 0.75rem;
+  }
+
+  .app-layout footer {
+    width: min(100% - 1.5rem, 100%);
+  }
+}

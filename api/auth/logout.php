@@ -1,7 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-session_destroy();
-header('Location: /auth/login.php');
+require_once __DIR__ . '/../includes/session.php';
+
+// Kosongkan session -> shutdown handler di session.php menghapus cookie.
+$_SESSION = [];
+header('Location: /auth/login');
 exit;

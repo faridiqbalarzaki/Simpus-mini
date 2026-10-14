@@ -1,13 +1,24 @@
 <?php
-$config = require __DIR__ . '/config.php';
+// Koneksi lazy + sekali per request (aman di-require berkali-kali).
+if (!isset($pdo)) {
+    $config = require __DIR__ . '/config.php';
 
-try {
-    $pdo = new PDO(
-        "pgsql:host={$config['db_host']};port={$config['db_port']};dbname={$config['db_name']}",
-        $config['db_user'],
-        $config['db_pass']
-    );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Koneksi database gagal: " . $e->getMessage());
+    try {
+        $dsn = sprintf(
+            'pgsql:host=%s;port=%s;dbname=%s;sslmode=%s;connect_timeout=5',
+            $config['db_host'], $config['db_port'], $config['db_name'], $config['db_sslmode']
+        );
+        $pdo = new PDO($dsn, $config['db_user'], $config['db_pass'], [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            // WAJIB untuk Supabase pooler mode transaction (port 6543): tidak
+            // mendukung server-side prepared statement. Bonus: 1 round-trip
+            // per query, bukan 2 (prepare + execute).
+            PDO::ATTR_EMULATE_PREPARES   => true,
+        ]);
+    } catch (PDOException $e) {
+        error_log('DB connect failed: ' . $e->getMessage());
+        http_response_code(503);
+        die('Layanan database sedang tidak tersedia. Coba lagi sebentar.');
+    }
 }

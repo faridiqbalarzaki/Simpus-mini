@@ -36,7 +36,7 @@ if ($anggotaId !== '') {
                 </div>
             </div>
 
-            <form class="filter" method="get" action="riwayat.php">
+            <form class="filter" method="get" action="/peminjaman/riwayat">
                 <p>
                     <label for="anggota_id">Pilih Anggota</label><br>
                     <select id="anggota_id" name="anggota_id">

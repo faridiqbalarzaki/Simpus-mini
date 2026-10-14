@@ -4,7 +4,7 @@ require __DIR__ . '/../includes/csrf.php';
 require __DIR__ . '/../includes/koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: list.php');
+    header('Location: /anggota/list');
     exit;
 }
 
@@ -17,5 +17,5 @@ if ($id) {
     $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Anggota berhasil dihapus.'];
 }
 
-header('Location: list.php');
+header('Location: /anggota/list');
 exit;

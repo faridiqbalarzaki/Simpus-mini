@@ -36,7 +36,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                     <p class="lead">Seluruh koleksi buku yang tersedia.</p>
                 </div>
                 <?php if ($sudahLogin): ?>
-                <a class="btn btn-primary" href="tambah.php">+ Tambah Buku</a>
+                <a class="btn btn-primary" href="/buku/tambah">+ Tambah Buku</a>
                 <?php endif; ?>
             </div>
 
@@ -45,7 +45,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
             <?php endif; ?>
 
             <div class="search-box">
-                <form method="get" action="list.php">
+                <form method="get" action="/buku/list">
                     <span>
                         <label for="search-input">Cari Judul Buku</label><br>
                         <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>" placeholder="Ketik judul buku...">
@@ -81,8 +81,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                             <td><span class="badge <?php echo $buku['stok'] <= 0 ? 'badge-out' : ($buku['stok'] <= 2 ? 'badge-low' : 'badge-ok'); ?>"><?php echo $buku['stok']; ?></span></td>
                             <?php if ($sudahLogin): ?>
                             <td class="aksi">
-                                <a href="edit.php?id=<?php echo $buku['id']; ?>" class="btn-edit">Edit</a>
-                                <form class="form-hapus" method="post" action="hapus.php">
+                                <a href="/buku/edit?id=<?php echo $buku['id']; ?>" class="btn-edit">Edit</a>
+                                <form class="form-hapus" method="post" action="/buku/hapus">
                                     <input type="hidden" name="id" value="<?php echo $buku['id']; ?>">
                                     <?php echo csrf_field(); ?>
                                     <button type="submit" class="btn-hapus">Hapus</button>
@@ -98,7 +98,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
 
             <nav class="pagination">
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                <a href="list.php?page=<?php echo $i; ?><?php echo $keyword !== '' ? '&q=' . urlencode($keyword) : ''; ?>"
+                <a href="/buku/list?page=<?php echo $i; ?><?php echo $keyword !== '' ? '&q=' . urlencode($keyword) : ''; ?>"
                    class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
                 <?php endfor; ?>
             </nav>

@@ -9,7 +9,7 @@ unset($_SESSION['flash']);
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
-    header('Location: list.php');
+    header('Location: /buku/list');
     exit;
 }
 
@@ -18,7 +18,7 @@ $stmt->execute(['id' => $id]);
 $buku = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$buku) {
-    header('Location: list.php');
+    header('Location: /buku/list');
     exit;
 }
 ?>
@@ -29,7 +29,7 @@ if (!$buku) {
                 <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
             <?php endif; ?>
 
-            <form id="form-tambah" method="post" action="proses_edit.php">
+            <form id="form-tambah" method="post" action="/buku/proses_edit">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="id" value="<?php echo (int) $buku['id']; ?>">
                 <p>

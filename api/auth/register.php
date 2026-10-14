@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/../includes/session.php';
 if (isset($_SESSION['user_id'])) {
     header('Location: /');
     exit;
@@ -20,7 +18,7 @@ unset($_SESSION['flash']);
                 <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
             <?php endif; ?>
 
-            <form method="post" action="/auth/proses_register.php">
+            <form method="post" action="/auth/proses_register">
                 <?php echo csrf_field(); ?>
                 <p>
                     <label for="nama">Nama</label><br>
@@ -38,6 +36,6 @@ unset($_SESSION['flash']);
                     <button type="submit">Daftar</button>
                 </p>
             </form>
-            <p>Sudah punya akun? <a href="/auth/login.php">Login di sini</a></p>
+            <p>Sudah punya akun? <a href="/auth/login">Login di sini</a></p>
         </section>
 <?php include __DIR__ . '/../includes/footer.php'; ?>

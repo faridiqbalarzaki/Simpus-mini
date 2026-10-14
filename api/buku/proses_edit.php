@@ -14,7 +14,7 @@ $stok = $_POST['stok'] ?? '';
 $kategori = trim($_POST['kategori'] ?? '');
 
 if (!$id) {
-    header('Location: list.php');
+    header('Location: /buku/list');
     exit;
 }
 
@@ -34,7 +34,7 @@ if (!is_numeric($stok) || $stok < 0) {
 
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
-    header('Location: edit.php?id=' . urlencode($id));
+    header('Location: /buku/edit?id=' . urlencode($id));
     exit;
 }
 
@@ -53,5 +53,5 @@ $stmt->execute([
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Buku berhasil diperbarui.'];
-header('Location: list.php');
+header('Location: /buku/list');
 exit;

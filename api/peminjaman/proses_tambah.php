@@ -10,7 +10,7 @@ $bukuId = $_POST['buku_id'] ?? '';
 
 if ($anggotaId === '' || $bukuId === '') {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Anggota dan buku wajib dipilih.'];
-    header('Location: tambah.php');
+    header('Location: /peminjaman/tambah');
     exit;
 }
 
@@ -84,11 +84,11 @@ try {
     $pdo->commit();
 
     $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Peminjaman berhasil dicatat.'];
-    header('Location: ../index.php');
+    header('Location: /');
     exit;
 } catch (Exception $e) {
     $pdo->rollBack();
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Gagal mencatat peminjaman: ' . $e->getMessage()];
-    header('Location: tambah.php');
+    header('Location: /peminjaman/tambah');
     exit;
 }

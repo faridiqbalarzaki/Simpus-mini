@@ -4,7 +4,7 @@ require __DIR__ . '/../includes/csrf.php';
 require __DIR__ . '/../includes/koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: kembali.php');
+    header('Location: /peminjaman/kembali');
     exit;
 }
 
@@ -12,7 +12,7 @@ csrf_verify();
 
 $id = $_POST['id'] ?? null;
 if (!$id) {
-    header('Location: kembali.php');
+    header('Location: /peminjaman/kembali');
     exit;
 }
 
@@ -42,5 +42,5 @@ try {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Gagal memproses pengembalian: ' . $e->getMessage()];
 }
 
-header('Location: kembali.php');
+header('Location: /peminjaman/kembali');
 exit;

@@ -30,7 +30,7 @@ if (!is_numeric($stok) || $stok < 0) {
 
 if (!empty($errors)) {
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
-    header('Location: tambah.php');
+    header('Location: /buku/tambah');
     exit;
 }
 
@@ -49,5 +49,5 @@ $stmt->execute([
 ]);
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Buku berhasil ditambahkan.'];
-header('Location: list.php');
+header('Location: /buku/list');
 exit;

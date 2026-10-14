@@ -13,7 +13,7 @@ unset($_SESSION['flash']);
                 <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
             <?php endif; ?>
 
-            <form id="form-tambah" method="post" action="proses_tambah.php">
+            <form id="form-tambah" method="post" action="/anggota/proses_tambah">
                 <?php echo csrf_field(); ?>
                 <p>
                     <label for="nama">Nama</label><br>

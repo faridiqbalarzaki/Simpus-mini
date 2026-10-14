@@ -28,4 +28,5 @@ return [
     'db_name' => getenv('DB_NAME') ?: 'simpus_mini',
     'db_user' => getenv('DB_USER') ?: 'postgres',
     'db_pass' => getenv('DB_PASS') ?: 'postgres',
+    'db_sslmode' => getenv('DB_SSLMODE') ?: 'require',
 ];
